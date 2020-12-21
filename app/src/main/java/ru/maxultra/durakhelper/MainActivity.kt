@@ -17,4 +17,8 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
     }
+
+    override fun onBackPressed() {
+        ConfirmDialog.show(this) { super.onBackPressed() }
+    }
 }
