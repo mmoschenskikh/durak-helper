@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="new_game_button" translatable="false">Новая</string>
+    <string name="new_game_button" translatable="false">Новая игра</string>
     <string name="my_cards_label">Мои</string>
     <string name="friend_cards_label">Друга</string>
     <string name="enemy_cards_label">Врага</string>
     <string name="discard_cards_button">Бито</string>
+    <string name="alert_title">Вы уверены?</string>
+    <string name="alert_question">Весь прогресс будет утерян</string>
+    <string name="yes_button">Да</string>
+    <string name="no_button">Нет</string>
 </resources>

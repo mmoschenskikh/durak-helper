@@ -5,4 +5,8 @@
     <string name="friend_cards_label">Friend\'s</string>
     <string name="enemy_cards_label">Enemy\'s</string>
     <string name="discard_cards_button">Discard</string>
+    <string name="alert_title">Are you sure?</string>
+    <string name="alert_question">All the progress will be lost</string>
+    <string name="yes_button">Yes</string>
+    <string name="no_button">No</string>
 </resources>
