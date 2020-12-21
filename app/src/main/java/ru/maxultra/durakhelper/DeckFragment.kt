@@ -28,6 +28,8 @@ class DeckFragment : Fragment() {
     private val adapter: CardAdapter
         get() = deckRecyclerView.adapter as CardAdapter
 
+    private val cardsChanged = mutableSetOf<Int>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -52,6 +54,7 @@ class DeckFragment : Fragment() {
             it.status = Card.Status.TABLE
             it
         })
+        deckRecyclerView.adapter?.notifyDataSetChanged()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,9 +75,11 @@ class DeckFragment : Fragment() {
             }
 
             val adapter = (deckRecyclerView.adapter as CardAdapter)
-            val list = adapter.currentList.map {
-                if (it.status == Card.Status.INGAME)
+            val list = adapter.currentList.mapIndexed { index, it ->
+                if (it.status == Card.Status.INGAME) {
                     it.status = newStatus
+                    cardsChanged.add(index)
+                }
                 it
             }
             updateUI(list)
@@ -111,7 +116,8 @@ class DeckFragment : Fragment() {
 
     private fun updateUI(deck: List<Card>) {
         (deckRecyclerView.adapter as CardAdapter).submitList(deck)
-        deckRecyclerView.adapter?.notifyDataSetChanged()
+        cardsChanged.forEach { deckRecyclerView.adapter?.notifyItemChanged(it, Unit) }
+        cardsChanged.clear()
     }
 
     private inner class CardHolder(view: View) : RecyclerView.ViewHolder(view),
