@@ -1,9 +1,7 @@
 package ru.maxultra.durakhelper
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +19,11 @@ class DeckFragment : Fragment() {
     }
     private var adapter: CardAdapter? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,6 +35,11 @@ class DeckFragment : Fragment() {
                 GridLayoutManager(this@DeckFragment.context, SPAN_COUNT)
             deckRecyclerView.adapter = CardAdapter(deckViewModel.deck)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_deck, menu)
     }
 
     private inner class CardHolder(view: View) : RecyclerView.ViewHolder(view) {
