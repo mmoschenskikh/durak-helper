@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Durak Helper</string>
-    <string name="new_game_button">New</string>
+    <string name="new_game_button">New game</string>
     <string name="my_cards_label">Mine</string>
     <string name="friend_cards_label">Friend\'s</string>
     <string name="enemy_cards_label">Enemy\'s</string>
