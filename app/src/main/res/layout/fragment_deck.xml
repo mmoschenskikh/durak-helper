@@ -22,7 +22,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/mine_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -33,7 +33,7 @@
             android:text="@string/my_cards_label" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/friend_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -44,7 +44,7 @@
             android:text="@string/friend_cards_label" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/enemy_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -55,7 +55,7 @@
             android:text="@string/enemy_cards_label" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/discard_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
