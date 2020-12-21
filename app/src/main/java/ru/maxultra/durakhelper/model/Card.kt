@@ -6,6 +6,6 @@ data class Card(val suit: Suit, val rank: Rank) {
     }
 
     enum class Rank {
-        SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE
+        ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX
     }
 }
