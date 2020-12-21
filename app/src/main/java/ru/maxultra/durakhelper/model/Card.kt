@@ -14,7 +14,7 @@ data class Card(val suit: Suit, val rank: Rank, var status: Status = Status.TABL
      * Describes who owns the card
      */
     enum class Status {
-        TABLE, USER, FRIEND, ENEMY, DISCARD
+        TABLE, MINE, FRIEND, ENEMY, INGAME, DISCARD
     }
 
     override fun toString(): String {
