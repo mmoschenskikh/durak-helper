@@ -3,6 +3,7 @@ package ru.maxultra.durakhelper
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
@@ -30,9 +31,13 @@ class DeckFragment : Fragment() {
 
     private val cardsChanged = mutableSetOf<Int>()
 
+    private var pixelHeight: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        pixelHeight = resources.displayMetrics.heightPixels
     }
 
     override fun onCreateView(
@@ -85,11 +90,14 @@ class DeckFragment : Fragment() {
             updateUI(list)
         }
 
-        mineButton.setOnClickListener(listener)
-        friendButton.setOnClickListener(listener)
-        enemyButton.setOnClickListener(listener)
-        discardButton.setOnClickListener(listener)
+        val bottomBarButtons = setOf(mineButton, friendButton, enemyButton, discardButton)
 
+        fun setProperties(button: Button) {
+            button.minHeight = pixelHeight / 10
+            button.setOnClickListener(listener)
+        }
+
+        bottomBarButtons.forEach { setProperties(it) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -122,11 +130,17 @@ class DeckFragment : Fragment() {
 
     private inner class CardHolder(view: View) : RecyclerView.ViewHolder(view),
         View.OnClickListener {
+        private val coeff = 12
+
         val cardButton: Button = itemView.findViewById(R.id.card_button)
+        val cardLayout: LinearLayout = itemView.findViewById(R.id.card_button_layout)
         private lateinit var card: Card
 
         init {
             cardButton.setOnClickListener(this)
+            val params = cardLayout.layoutParams
+            params.height = pixelHeight / coeff
+            cardLayout.layoutParams = params
         }
 
         fun bind(card: Card) {
