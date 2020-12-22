@@ -9,4 +9,8 @@
     <string name="alert_question">Весь прогресс будет утерян</string>
     <string name="yes_button">Да</string>
     <string name="no_button">Нет</string>
+    <string name="trump_diamonds">Козырь: бубны (♦)</string>
+    <string name="trump_clubs">Козырь: трефы (♣)</string>
+    <string name="trump_hearts">Козырь: червы (♥)</string>
+    <string name="trump_spades">Козырь: пики (♠)</string>
 </resources>
