@@ -1,5 +1,6 @@
 package ru.maxultra.durakhelper
 
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
@@ -32,6 +33,7 @@ class DeckFragment : Fragment() {
         get() = deckRecyclerView.adapter as CardAdapter
 
     private val cardsChanged = mutableSetOf<Int>()
+    private var trumpSuit: Card.Suit? = null
 
     private var pixelHeight: Int = 0
 
@@ -61,6 +63,7 @@ class DeckFragment : Fragment() {
             it.status = Card.Status.TABLE
             it
         })
+        trumpSuit = null
         deckRecyclerView.adapter?.notifyDataSetChanged()
     }
 
@@ -110,13 +113,45 @@ class DeckFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.new_game -> {
-                if ((deckRecyclerView.adapter as CardAdapter).currentList.any { it.status != Card.Status.TABLE }) {
+                if ((deckRecyclerView.adapter as CardAdapter).currentList.any { it.status != Card.Status.TABLE } || trumpSuit != null) {
                     ConfirmDialog.show(context) { resetState() }
                 }
                 true
             }
+            R.id.trump_diamonds -> {
+                trumpSuit?.let { findSuitCards(it) }
+                trumpSuit = Card.Suit.DIAMONDS
+                findSuitCards(trumpSuit!!)
+                updateCardsChanged()
+                true
+            }
+            R.id.trump_clubs -> {
+                trumpSuit?.let { findSuitCards(it) }
+                trumpSuit = Card.Suit.CLUBS
+                findSuitCards(trumpSuit!!)
+                updateCardsChanged()
+                true
+            }
+            R.id.trump_hearts -> {
+                trumpSuit?.let { findSuitCards(it) }
+                trumpSuit = Card.Suit.HEARTS
+                findSuitCards(trumpSuit!!)
+                updateCardsChanged()
+                true
+            }
+            R.id.trump_spades -> {
+                trumpSuit?.let { findSuitCards(it) }
+                trumpSuit = Card.Suit.SPADES
+                findSuitCards(trumpSuit!!)
+                updateCardsChanged()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun findSuitCards(suit: Card.Suit) {
+        cardsChanged.addAll((0..deckViewModel.deckSize).toSet().filter { it % 4 == suit.ordinal })
     }
 
     override fun onDetach() {
@@ -126,6 +161,10 @@ class DeckFragment : Fragment() {
 
     private fun updateUI(deck: List<Card>) {
         (deckRecyclerView.adapter as CardAdapter).submitList(deck)
+        updateCardsChanged()
+    }
+
+    private fun updateCardsChanged() {
         cardsChanged.forEach { deckRecyclerView.adapter?.notifyItemChanged(it, Unit) }
         cardsChanged.clear()
     }
@@ -134,52 +173,49 @@ class DeckFragment : Fragment() {
         View.OnClickListener {
         private val coeff = 12
 
-        val cardButton: Button = itemView.findViewById(R.id.card_button)
-        val cardLayout: LinearLayout = itemView.findViewById(R.id.card_button_layout)
+        private val cardButton: Button = itemView.findViewById(R.id.card_button)
+        private val cardLayout: LinearLayout = itemView.findViewById(R.id.card_button_layout)
         private lateinit var card: Card
 
-        val clubsDrawable = ResourcesCompat.getDrawable(resources, R.drawable.clubs, null)
-        val heartsDrawable = ResourcesCompat.getDrawable(resources, R.drawable.hearts, null)
-        val spadesDrawable = ResourcesCompat.getDrawable(resources, R.drawable.spades, null)
-        val diamondsDrawable = ResourcesCompat.getDrawable(resources, R.drawable.diamonds, null)
+        private val clubsDrawable = ResourcesCompat.getDrawable(resources, R.drawable.clubs, null)
+        private val heartsDrawable = ResourcesCompat.getDrawable(resources, R.drawable.hearts, null)
+        private val spadesDrawable = ResourcesCompat.getDrawable(resources, R.drawable.spades, null)
+        private val diamondsDrawable =
+            ResourcesCompat.getDrawable(resources, R.drawable.diamonds, null)
+
+        private var cardDrawable: Drawable? = null
 
         init {
             cardButton.setOnClickListener(this)
             val params = cardLayout.layoutParams
             params.height = pixelHeight / coeff
             cardLayout.layoutParams = params
-
-            val suitDrawables = setOf(
-                clubsDrawable,
-                heartsDrawable,
-                spadesDrawable,
-                diamondsDrawable
-            )
-
-            fun changeDrawableSize(drawable: Drawable, size: Int) {
-                drawable.setBounds(0, 0, size, size)
-            }
-
-            suitDrawables.forEach { changeDrawableSize(it!!, params.height / 2) }
         }
 
         fun bind(card: Card) {
             this.card = card
+            val size = (pixelHeight / coeff) / 2
 
-            fun setRightDrawable(drawable: Drawable?) {
-                cardButton.setCompoundDrawables(null, null, drawable, null)
+            cardDrawable = when (card.suit) {
+                Card.Suit.CLUBS -> clubsDrawable
+                Card.Suit.HEARTS -> heartsDrawable
+                Card.Suit.SPADES -> spadesDrawable
+                Card.Suit.DIAMONDS -> diamondsDrawable
             }
 
-            when (card.suit) {
-                Card.Suit.CLUBS -> setRightDrawable(clubsDrawable)
-                Card.Suit.HEARTS -> setRightDrawable(heartsDrawable)
-                Card.Suit.SPADES -> setRightDrawable(spadesDrawable)
-                Card.Suit.DIAMONDS -> setRightDrawable(diamondsDrawable)
-            }
+            if (card.suit == trumpSuit)
+                cardLayout.background =
+                    ColorDrawable(resources.getColor(R.color.trump_suit_color, null))
+            else
+                cardLayout.background = null
 
+            cardDrawable?.setBounds(0, 0, size, size)
             assessImage()
         }
 
+        private fun setDrawable(drawable: Drawable?) {
+            cardButton.setCompoundDrawables(null, null, drawable, null)
+        }
 
         override fun onClick(v: View?) {
             if (card.status == Card.Status.INGAME)
@@ -201,8 +237,10 @@ class DeckFragment : Fragment() {
             cardButton.backgroundTintList = context?.getColorStateList(color)
             if (card.status == Card.Status.DISCARD) {
                 cardButton.text = ""
+                setDrawable(null)
             } else {
                 cardButton.text = card.rank.rankString
+                setDrawable(cardDrawable)
             }
         }
     }
