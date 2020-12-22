@@ -1,9 +1,11 @@
 package ru.maxultra.durakhelper
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
@@ -136,15 +138,45 @@ class DeckFragment : Fragment() {
         val cardLayout: LinearLayout = itemView.findViewById(R.id.card_button_layout)
         private lateinit var card: Card
 
+        val clubsDrawable = ResourcesCompat.getDrawable(resources, R.drawable.clubs, null)
+        val heartsDrawable = ResourcesCompat.getDrawable(resources, R.drawable.hearts, null)
+        val spadesDrawable = ResourcesCompat.getDrawable(resources, R.drawable.spades, null)
+        val diamondsDrawable = ResourcesCompat.getDrawable(resources, R.drawable.diamonds, null)
+
         init {
             cardButton.setOnClickListener(this)
             val params = cardLayout.layoutParams
             params.height = pixelHeight / coeff
             cardLayout.layoutParams = params
+
+            val suitDrawables = setOf(
+                clubsDrawable,
+                heartsDrawable,
+                spadesDrawable,
+                diamondsDrawable
+            )
+
+            fun changeDrawableSize(drawable: Drawable, size: Int) {
+                drawable.setBounds(0, 0, size, size)
+            }
+
+            suitDrawables.forEach { changeDrawableSize(it!!, params.height / 2) }
         }
 
         fun bind(card: Card) {
             this.card = card
+
+            fun setRightDrawable(drawable: Drawable?) {
+                cardButton.setCompoundDrawables(null, null, drawable, null)
+            }
+
+            when (card.suit) {
+                Card.Suit.CLUBS -> setRightDrawable(clubsDrawable)
+                Card.Suit.HEARTS -> setRightDrawable(heartsDrawable)
+                Card.Suit.SPADES -> setRightDrawable(spadesDrawable)
+                Card.Suit.DIAMONDS -> setRightDrawable(diamondsDrawable)
+            }
+
             assessImage()
         }
 
@@ -170,7 +202,7 @@ class DeckFragment : Fragment() {
             if (card.status == Card.Status.DISCARD) {
                 cardButton.text = ""
             } else {
-                cardButton.text = card.toString()
+                cardButton.text = card.rank.rankString
             }
         }
     }

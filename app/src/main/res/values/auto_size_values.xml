@@ -9,5 +9,15 @@
         <item>72sp</item>
         <item>96sp</item>
     </array>
+    <array name="auto_size_card_text_sizes">
+        <item>16sp</item>
+        <item>20sp</item>
+        <item>24sp</item>
+        <item>32sp</item>
+        <item>48sp</item>
+        <item>56sp</item>
+        <item>72sp</item>
+        <item>96sp</item>
+    </array>
 </resources>
 
