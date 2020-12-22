@@ -6,4 +6,29 @@
         android:id="@+id/new_game"
         android:title="@string/new_game_button"
         app:showAsAction="ifRoom|withText" />
+    <group
+        android:id="@+id/group_trump"
+        android:checkableBehavior="single"
+        android:enabled="true">
+        <item
+            android:id="@+id/trump_diamonds"
+            android:checkable="false"
+            android:title="@string/trump_diamonds"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/trump_clubs"
+            android:checkable="false"
+            android:title="@string/trump_clubs"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/trump_hearts"
+            android:checkable="false"
+            android:title="@string/trump_hearts"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/trump_spades"
+            android:checkable="false"
+            android:title="@string/trump_spades"
+            app:showAsAction="never" />
+    </group>
 </menu>
