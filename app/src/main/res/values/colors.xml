@@ -7,11 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="my_color">#FF3498db</color>
-    <color name="friend_color">#FF2ecc71</color>
-    <color name="enemy_color">#FFe67e22</color>
-    <color name="discard_color">#FFc0392b</color>
-    <color name="ingame_color">#FFfff200</color>
+    <color name="my_color">#FF45aaf2</color>
+    <color name="friend_color">#FF26de81</color>
+    <color name="enemy_color">#FFfd9644</color>
+    <color name="discard_color">#FFfc5c65</color>
+    <color name="ingame_color">#FFfed330</color>
     <color name="table_color">#FF35654d</color>
-    <color name="table_card_color">#FFecf0f1</color>
+    <color name="table_card_color">#FFd1d8e0</color>
+    <color name="trump_suit_color">#FFa55eea</color>
 </resources>
