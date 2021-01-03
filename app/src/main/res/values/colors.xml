@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
+    <color name="naval">#FF40739e</color>
+    <color name="mazarine_blue">#FF273c75</color>
+    <color name="pico_void">#FF192a56</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="my_color">#FF45aaf2</color>
-    <color name="friend_color">#FF26de81</color>
-    <color name="enemy_color">#FFfd9644</color>
-    <color name="discard_color">#FFfc5c65</color>
-    <color name="ingame_color">#FFfed330</color>
+
     <color name="table_color">#FF35654d</color>
-    <color name="table_card_color">#FFd1d8e0</color>
-    <color name="trump_suit_color">#FFa55eea</color>
+
+    <color name="my_color">#FF00a8ff</color>
+    <color name="friend_color">#FF44bd32</color>
+    <color name="discard_color">#FF7f8fa6</color>
+    <color name="enemy_color">#FFc23616</color>
+    <color name="ingame_color">#FFfbc531</color>
+    <color name="table_card_color">#FFf5f6fa</color>
+    <color name="trump_suit_color">#FF8c7ae6</color>
 </resources>
