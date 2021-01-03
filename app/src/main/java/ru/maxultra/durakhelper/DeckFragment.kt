@@ -210,7 +210,7 @@ class DeckFragment : Fragment() {
                 Card.Suit.DIAMONDS ->
                     ResourcesCompat.getDrawable(resources, R.drawable.diamonds, null)
             }
-            val size = (pixelHeight / coeff) / 2
+            val size = ((pixelHeight / coeff) / 2.5).toInt()
             drawable?.setBounds(0, 0, size, size)
             return drawable
         }
