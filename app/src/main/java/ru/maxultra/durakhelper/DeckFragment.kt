@@ -112,6 +112,13 @@ class DeckFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        fun changedTrumpSuit(newSuit: Card.Suit): Boolean {
+            trumpSuit?.let { addSuitCardsChanged(it) }
+            trumpSuit = newSuit
+            addSuitCardsChanged(trumpSuit!!)
+            updateCardsChanged()
+            return true
+        }
         return when (item.itemId) {
             R.id.new_game -> {
                 if ((deckRecyclerView.adapter as CardAdapter).currentList.any { it.status != Card.Status.TABLE } || trumpSuit != null) {
@@ -119,39 +126,15 @@ class DeckFragment : Fragment() {
                 }
                 true
             }
-            R.id.trump_diamonds -> {
-                trumpSuit?.let { findSuitCards(it) }
-                trumpSuit = Card.Suit.DIAMONDS
-                findSuitCards(trumpSuit!!)
-                updateCardsChanged()
-                true
-            }
-            R.id.trump_clubs -> {
-                trumpSuit?.let { findSuitCards(it) }
-                trumpSuit = Card.Suit.CLUBS
-                findSuitCards(trumpSuit!!)
-                updateCardsChanged()
-                true
-            }
-            R.id.trump_hearts -> {
-                trumpSuit?.let { findSuitCards(it) }
-                trumpSuit = Card.Suit.HEARTS
-                findSuitCards(trumpSuit!!)
-                updateCardsChanged()
-                true
-            }
-            R.id.trump_spades -> {
-                trumpSuit?.let { findSuitCards(it) }
-                trumpSuit = Card.Suit.SPADES
-                findSuitCards(trumpSuit!!)
-                updateCardsChanged()
-                true
-            }
+            R.id.trump_diamonds -> changedTrumpSuit(Card.Suit.DIAMONDS)
+            R.id.trump_clubs -> changedTrumpSuit(Card.Suit.CLUBS)
+            R.id.trump_hearts -> changedTrumpSuit(Card.Suit.HEARTS)
+            R.id.trump_spades -> changedTrumpSuit(Card.Suit.SPADES)
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun findSuitCards(suit: Card.Suit) {
+    private fun addSuitCardsChanged(suit: Card.Suit) {
         cardsChanged.addAll((0..deckViewModel.deckSize).toSet().filter { it % 4 == suit.ordinal })
     }
 
