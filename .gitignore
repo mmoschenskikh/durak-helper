@@ -10,6 +10,8 @@
 /captures
 .cxx
 
+/graphics
+
 # Created by https://www.toptal.com/developers/gitignore/api/android,jetbrains,windows,gradle
 # Edit at https://www.toptal.com/developers/gitignore?templates=android,jetbrains,windows,gradle
 
