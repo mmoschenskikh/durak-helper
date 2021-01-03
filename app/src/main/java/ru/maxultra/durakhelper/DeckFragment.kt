@@ -1,5 +1,6 @@
 package ru.maxultra.durakhelper
 
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -222,6 +223,7 @@ class DeckFragment : Fragment() {
         override fun onClick(v: View?) {
             if (v == cardLayout && cardButton.visibility == View.INVISIBLE) {
                 card.status = Card.Status.INGAME
+                cardButton.typeface = Typeface.DEFAULT_BOLD
                 cardButton.visibility = View.VISIBLE
             } else {
                 if (card.status == Card.Status.INGAME)
@@ -233,12 +235,16 @@ class DeckFragment : Fragment() {
         }
 
         fun assessImage() {
+            cardButton.typeface = Typeface.DEFAULT
             val color = when (card.status) {
                 Card.Status.TABLE -> R.color.table_card_color
                 Card.Status.MINE -> R.color.my_color
                 Card.Status.FRIEND -> R.color.friend_color
                 Card.Status.ENEMY -> R.color.enemy_color
-                Card.Status.INGAME -> R.color.ingame_color
+                Card.Status.INGAME -> {
+                    cardButton.typeface = Typeface.DEFAULT_BOLD
+                    R.color.ingame_color
+                }
                 Card.Status.DISCARD -> R.color.ingame_color
             }
             cardButton.backgroundTintList = context?.getColorStateList(color)
