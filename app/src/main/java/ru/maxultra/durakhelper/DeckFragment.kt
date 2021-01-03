@@ -187,6 +187,7 @@ class DeckFragment : Fragment() {
 
         init {
             cardButton.setOnClickListener(this)
+            cardLayout.setOnClickListener(this)
             val params = cardLayout.layoutParams
             params.height = pixelHeight / coeff
             cardLayout.layoutParams = params
@@ -195,6 +196,7 @@ class DeckFragment : Fragment() {
         fun bind(card: Card) {
             this.card = card
             val size = (pixelHeight / coeff) / 2
+            cardButton.visibility = View.VISIBLE
 
             cardDrawable = when (card.suit) {
                 Card.Suit.CLUBS -> clubsDrawable
@@ -218,11 +220,16 @@ class DeckFragment : Fragment() {
         }
 
         override fun onClick(v: View?) {
-            if (card.status == Card.Status.INGAME)
-                card.status = Card.Status.TABLE
-            else
+            if (v == cardLayout && cardButton.visibility == View.INVISIBLE) {
                 card.status = Card.Status.INGAME
-            assessImage()
+                cardButton.visibility = View.VISIBLE
+            } else {
+                if (card.status == Card.Status.INGAME)
+                    card.status = Card.Status.TABLE
+                else
+                    card.status = Card.Status.INGAME
+                assessImage()
+            }
         }
 
         fun assessImage() {
@@ -232,12 +239,11 @@ class DeckFragment : Fragment() {
                 Card.Status.FRIEND -> R.color.friend_color
                 Card.Status.ENEMY -> R.color.enemy_color
                 Card.Status.INGAME -> R.color.ingame_color
-                Card.Status.DISCARD -> R.color.discard_color
+                Card.Status.DISCARD -> R.color.ingame_color
             }
             cardButton.backgroundTintList = context?.getColorStateList(color)
             if (card.status == Card.Status.DISCARD) {
-                cardButton.text = ""
-                setDrawable(null)
+                cardButton.visibility = View.INVISIBLE
             } else {
                 cardButton.text = card.rank.rankString
                 setDrawable(cardDrawable)
