@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -194,7 +195,9 @@ class DeckFragment : Fragment() {
         private fun setCardLayoutBackground() {
             cardLayout.background =
                 if (card.suit == trumpSuit)
-                    ColorDrawable(resources.getColor(R.color.trump_suit_color, null))
+                    context?.let {
+                        ColorDrawable(ContextCompat.getColor(it, R.color.trump_suit_color))
+                    }
                 else
                     null
         }
@@ -230,7 +233,8 @@ class DeckFragment : Fragment() {
                 Card.Status.ENEMY -> R.color.enemy_color
                 else -> R.color.ingame_color
             }
-            cardButton.backgroundTintList = context?.getColorStateList(color)
+            cardButton.backgroundTintList =
+                context?.let { ContextCompat.getColorStateList(it, color) }
         }
 
         private fun setCardDrawable() {
