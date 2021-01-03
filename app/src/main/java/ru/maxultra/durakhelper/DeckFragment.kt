@@ -172,88 +172,102 @@ class DeckFragment : Fragment() {
 
     private inner class CardHolder(view: View) : RecyclerView.ViewHolder(view),
         View.OnClickListener {
-        private val coeff = 12
+        private val coeff = Card.Rank.values().size + 3
 
         private val cardButton: Button = itemView.findViewById(R.id.card_button)
         private val cardLayout: LinearLayout = itemView.findViewById(R.id.card_button_layout)
+        private var cardDrawable: Drawable? = null
         private lateinit var card: Card
 
-        private val clubsDrawable = ResourcesCompat.getDrawable(resources, R.drawable.clubs, null)
-        private val heartsDrawable = ResourcesCompat.getDrawable(resources, R.drawable.hearts, null)
-        private val spadesDrawable = ResourcesCompat.getDrawable(resources, R.drawable.spades, null)
-        private val diamondsDrawable =
-            ResourcesCompat.getDrawable(resources, R.drawable.diamonds, null)
-
-        private var cardDrawable: Drawable? = null
-
         init {
+            setCardLayoutHeight()
             cardButton.setOnClickListener(this)
             cardLayout.setOnClickListener(this)
+        }
+
+        fun bind(card: Card) {
+            this.card = card
+            cardDrawable = findCardDrawable()
+            setCardLayoutBackground()
+            assessCardAppearance()
+        }
+
+        override fun onClick(v: View?) {
+            card.status =
+                if (v == cardButton && card.status == Card.Status.INGAME)
+                    Card.Status.TABLE
+                else
+                    Card.Status.INGAME
+
+            assessCardAppearance()
+        }
+
+        private fun setCardLayoutHeight() {
             val params = cardLayout.layoutParams
             params.height = pixelHeight / coeff
             cardLayout.layoutParams = params
         }
 
-        fun bind(card: Card) {
-            this.card = card
-            val size = (pixelHeight / coeff) / 2
-            cardButton.visibility = View.VISIBLE
-
-            cardDrawable = when (card.suit) {
-                Card.Suit.CLUBS -> clubsDrawable
-                Card.Suit.HEARTS -> heartsDrawable
-                Card.Suit.SPADES -> spadesDrawable
-                Card.Suit.DIAMONDS -> diamondsDrawable
-            }
-
-            if (card.suit == trumpSuit)
-                cardLayout.background =
+        private fun setCardLayoutBackground() {
+            cardLayout.background =
+                if (card.suit == trumpSuit)
                     ColorDrawable(resources.getColor(R.color.trump_suit_color, null))
-            else
-                cardLayout.background = null
-
-            cardDrawable?.setBounds(0, 0, size, size)
-            assessImage()
-        }
-
-        private fun setDrawable(drawable: Drawable?) {
-            cardButton.setCompoundDrawables(null, null, drawable, null)
-        }
-
-        override fun onClick(v: View?) {
-            if (v == cardLayout && cardButton.visibility == View.INVISIBLE) {
-                card.status = Card.Status.INGAME
-                cardButton.typeface = Typeface.DEFAULT_BOLD
-                cardButton.visibility = View.VISIBLE
-            } else {
-                if (card.status == Card.Status.INGAME)
-                    card.status = Card.Status.TABLE
                 else
-                    card.status = Card.Status.INGAME
-                assessImage()
+                    null
+        }
+
+        private fun findCardDrawable(): Drawable? {
+            val drawable = when (card.suit) {
+                Card.Suit.CLUBS -> ResourcesCompat.getDrawable(resources, R.drawable.clubs, null)
+                Card.Suit.HEARTS -> ResourcesCompat.getDrawable(resources, R.drawable.hearts, null)
+                Card.Suit.SPADES -> ResourcesCompat.getDrawable(resources, R.drawable.spades, null)
+                Card.Suit.DIAMONDS ->
+                    ResourcesCompat.getDrawable(resources, R.drawable.diamonds, null)
+            }
+            val size = (pixelHeight / coeff) / 2
+            drawable?.setBounds(0, 0, size, size)
+            return drawable
+        }
+
+        private fun assessCardAppearance() {
+            setCardColor()
+            setCardTypeface()
+            setCardVisibility()
+            if (card.status != Card.Status.DISCARD) {
+                cardButton.text = card.rank.rankString
+                setCardDrawable()
             }
         }
 
-        fun assessImage() {
-            cardButton.typeface = Typeface.DEFAULT
+        private fun setCardColor() {
             val color = when (card.status) {
                 Card.Status.TABLE -> R.color.table_card_color
                 Card.Status.MINE -> R.color.my_color
                 Card.Status.FRIEND -> R.color.friend_color
                 Card.Status.ENEMY -> R.color.enemy_color
-                Card.Status.INGAME -> {
-                    cardButton.typeface = Typeface.DEFAULT_BOLD
-                    R.color.ingame_color
-                }
-                Card.Status.DISCARD -> R.color.ingame_color
+                else -> R.color.ingame_color
             }
             cardButton.backgroundTintList = context?.getColorStateList(color)
-            if (card.status == Card.Status.DISCARD) {
-                cardButton.visibility = View.INVISIBLE
-            } else {
-                cardButton.text = card.rank.rankString
-                setDrawable(cardDrawable)
-            }
+        }
+
+        private fun setCardDrawable() {
+            cardButton.setCompoundDrawables(null, null, cardDrawable, null)
+        }
+
+        private fun setCardTypeface() {
+            cardButton.typeface =
+                if (card.status == Card.Status.INGAME)
+                    Typeface.DEFAULT_BOLD
+                else
+                    Typeface.DEFAULT
+        }
+
+        private fun setCardVisibility() {
+            cardButton.visibility =
+                if (card.status == Card.Status.DISCARD)
+                    View.INVISIBLE
+                else
+                    View.VISIBLE
         }
     }
 
