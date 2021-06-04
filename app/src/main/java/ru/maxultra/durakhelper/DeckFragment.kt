@@ -88,7 +88,7 @@ class DeckFragment : Fragment() {
 
             val adapter = (deckRecyclerView.adapter as CardAdapter)
             val list = adapter.currentList.mapIndexed { index, it ->
-                if (it.status == Card.Status.INGAME) {
+                if (it.status == Card.Status.IN_GAME) {
                     it.status = newStatus
                     cardsChanged.add(index)
                 }
@@ -178,10 +178,10 @@ class DeckFragment : Fragment() {
 
         override fun onClick(v: View?) {
             card.status =
-                if (v == cardButton && card.status == Card.Status.INGAME)
+                if (v == cardButton && card.status == Card.Status.IN_GAME)
                     Card.Status.TABLE
                 else
-                    Card.Status.INGAME
+                    Card.Status.IN_GAME
 
             assessCardAppearance()
         }
@@ -220,7 +220,7 @@ class DeckFragment : Fragment() {
             setCardTypeface()
             setCardVisibility()
             if (card.status != Card.Status.DISCARD) {
-                cardButton.text = card.rank.rankString
+//                cardButton.text = card.rank.rankString
                 setCardDrawable()
             }
         }
@@ -243,7 +243,7 @@ class DeckFragment : Fragment() {
 
         private fun setCardTypeface() {
             cardButton.typeface =
-                if (card.status == Card.Status.INGAME)
+                if (card.status == Card.Status.IN_GAME)
                     Typeface.DEFAULT_BOLD
                 else
                     Typeface.DEFAULT
