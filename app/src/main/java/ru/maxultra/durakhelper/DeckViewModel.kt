@@ -7,9 +7,10 @@ import ru.maxultra.durakhelper.model.Card
 import ru.maxultra.durakhelper.model.DeckOfCards
 
 class DeckViewModel : ViewModel() {
-
+    // TODO: Deck size settings
     val deckSize: Int
-        get() = DeckOfCards.deck.size
+        get() = 36
 
-    val deckLiveData: LiveData<List<Card>> = MutableLiveData(DeckOfCards.deck)
+    val deckLiveData: LiveData<List<Card>> =
+        MutableLiveData(DeckOfCards.getDeckOfSize(DeckOfCards.DeckSize.THIRTY_SIX))
 }

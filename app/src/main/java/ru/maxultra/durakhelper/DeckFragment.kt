@@ -220,7 +220,7 @@ class DeckFragment : Fragment() {
             setCardTypeface()
             setCardVisibility()
             if (card.status != Card.Status.DISCARD) {
-//                cardButton.text = card.rank.rankString
+                cardButton.text = resources.getStringArray(R.array.ranks_array)[card.rank.ordinal]
                 setCardDrawable()
             }
         }
