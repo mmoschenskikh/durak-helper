@@ -1,7 +1,11 @@
 package ru.maxultra.durakhelper.model
 
 object DeckOfCards {
-    val deck: List<Card>
+    private val deck: List<Card>
+
+    enum class DeckSize(val asInt: Int) {
+        TWENTY_FOUR(24), THIRTY_TWO(32), THIRTY_SIX(36), FIFTY_TWO(52)
+    }
 
     init {
         val deckOfCards = mutableListOf<Card>()
@@ -12,4 +16,10 @@ object DeckOfCards {
         }
         deck = deckOfCards.toList()
     }
+
+    /**
+     * Returns the deck of size [size].
+     * Note that the deck is a singleton.
+     */
+    fun getDeckOfSize(size: DeckSize) = deck.subList(0, size.asInt)
 }
