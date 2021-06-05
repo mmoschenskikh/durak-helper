@@ -89,5 +89,8 @@ class DeckOfCardsTests {
             assertEquals(randomStatus, deck[randomCard].status)
         }
 
+        // Restoring the initial deck state
+        DeckOfCards.getDeckOfSize(DeckOfCards.DeckSize.FIFTY_TWO)
+            .forEach { it.status = Card.Status.TABLE }
     }
 }
