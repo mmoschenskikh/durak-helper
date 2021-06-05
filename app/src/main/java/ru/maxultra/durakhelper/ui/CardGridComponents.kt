@@ -1,8 +1,10 @@
 package ru.maxultra.durakhelper.ui
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
@@ -15,6 +17,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -24,7 +27,7 @@ import ru.maxultra.durakhelper.model.DeckOfCards
 
 
 @Composable
-fun CardComponent(card: Card, cardWidth: Dp, cardHeight: Dp) {
+fun CardComponent(card: Card, cardWidth: Dp, cardHeight: Dp, onClick: (Card) -> Unit) {
     if (card.status != Card.Status.DISCARD) {
         val color = when (card.status) {
             Card.Status.TABLE -> TableCardColor
@@ -33,12 +36,15 @@ fun CardComponent(card: Card, cardWidth: Dp, cardHeight: Dp) {
             Card.Status.ENEMY -> EnemyColor
             else -> InGameColor
         }
+        Log.d("CardComponent", "Status ${card.status}, color $color")
         val suitIconId = when (card.suit) {
             Card.Suit.CLUBS -> R.drawable.clubs
             Card.Suit.SPADES -> R.drawable.spades
             Card.Suit.DIAMONDS -> R.drawable.diamonds
             Card.Suit.HEARTS -> R.drawable.hearts
         }
+        val fontWeight =
+            if (card.status == Card.Status.IN_GAME) FontWeight.Bold else FontWeight.Normal
         Surface(
             color = color,
             shape = RoundedCornerShape(8.dp),
@@ -52,7 +58,9 @@ fun CardComponent(card: Card, cardWidth: Dp, cardHeight: Dp) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier
+                    .clickable { onClick(card) }
+                    .padding(8.dp)
             ) {
                 BoxWithConstraints(
                     modifier = Modifier
@@ -65,6 +73,7 @@ fun CardComponent(card: Card, cardWidth: Dp, cardHeight: Dp) {
                         text = stringArrayResource(id = R.array.ranks_array)[card.rank.ordinal],
                         maxLines = 1,
                         fontSize = LocalDensity.current.run { fontSize.toSp() },
+                        fontWeight = fontWeight,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 4.dp)
@@ -90,7 +99,8 @@ fun CardColumnComponent(
     suit: Card.Suit,
     trumpSuit: Card.Suit?,
     cardWidth: Dp,
-    cardHeight: Dp
+    cardHeight: Dp,
+    onClick: (Card) -> Unit
 ) {
     val backgroundColor = if (trumpSuit == suit) {
         when (trumpSuit) {
@@ -108,17 +118,19 @@ fun CardColumnComponent(
             .background(backgroundColor)
     ) {
         deck.forEach { card ->
-            if (card.suit == suit) CardComponent(
-                card = card,
-                cardWidth = cardWidth,
-                cardHeight = cardHeight
-            )
+            if (card.suit == suit)
+                CardComponent(
+                    card = card,
+                    cardWidth = cardWidth,
+                    cardHeight = cardHeight,
+                    onClick = onClick
+                )
         }
     }
 }
 
 @Composable
-fun CardGridComponent(deck: List<Card>, trumpSuit: Card.Suit? = null) {
+fun CardGridComponent(deck: List<Card>, onClick: (Card) -> Unit, trumpSuit: Card.Suit? = null) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
@@ -135,7 +147,8 @@ fun CardGridComponent(deck: List<Card>, trumpSuit: Card.Suit? = null) {
                     suit = suit,
                     trumpSuit = trumpSuit,
                     cardWidth = w,
-                    cardHeight = h
+                    cardHeight = h,
+                    onClick = onClick
                 )
             }
         }
@@ -146,5 +159,5 @@ fun CardGridComponent(deck: List<Card>, trumpSuit: Card.Suit? = null) {
 @Composable
 @Preview
 fun DefaultPreview() {
-    CardGridComponent(DeckOfCards.getDeckOfSize(DeckOfCards.DeckSize.TWENTY_FOUR))
+    CardGridComponent(DeckOfCards.getDeckOfSize(DeckOfCards.DeckSize.TWENTY_FOUR), {})
 }
