@@ -1,19 +1,12 @@
 package ru.maxultra.durakhelper.model
 
-data class Card(val suit: Suit, val rank: Rank, var status: Status = Status.TABLE) {
+data class Card(val suit: Suit, val rank: Rank) {
     enum class Suit {
         DIAMONDS, CLUBS, HEARTS, SPADES
     }
 
     enum class Rank {
         ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO
-    }
-
-    /**
-     * Describes who owns the card
-     */
-    enum class Status {
-        TABLE, MINE, FRIEND, ENEMY, IN_GAME, DISCARD
     }
 
     override fun toString(): String {

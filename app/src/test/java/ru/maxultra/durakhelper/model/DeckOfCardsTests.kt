@@ -2,7 +2,6 @@ package ru.maxultra.durakhelper.model
 
 import org.junit.Assert.*
 import org.junit.Test
-import kotlin.random.Random
 
 class DeckOfCardsTests {
 
@@ -60,37 +59,5 @@ class DeckOfCardsTests {
             assertTrue(deck.contains(Card(suit, Card.Rank.QUEEN)))
             assertTrue(deck.contains(Card(suit, Card.Rank.ACE)))
         }
-    }
-
-    @Test
-    fun deckStateTest() {
-        var deck = DeckOfCards.getDeckOfSize(DeckOfCards.DeckSize.THIRTY_SIX)
-        for (i in 0..10) {
-            val randomCard = Random.nextInt(36)
-            val randomStatus: Card.Status
-            with(Card.Status.values()) {
-                randomStatus = this[Random.nextInt(this.size)]
-            }
-
-            deck[randomCard].status = randomStatus
-            assertEquals(randomStatus, deck[randomCard].status)
-            deck = DeckOfCards.getDeckOfSize(DeckOfCards.DeckSize.TWENTY_FOUR)
-            if (randomCard < 24) {
-                assertEquals(randomStatus, deck[randomCard].status)
-            }
-            deck = DeckOfCards.getDeckOfSize(DeckOfCards.DeckSize.THIRTY_TWO)
-            if (randomCard < 32) {
-                assertEquals(randomStatus, deck[randomCard].status)
-            }
-            deck = DeckOfCards.getDeckOfSize(DeckOfCards.DeckSize.FIFTY_TWO)
-            assertEquals(randomStatus, deck[randomCard].status)
-
-            deck = DeckOfCards.getDeckOfSize(DeckOfCards.DeckSize.THIRTY_SIX)
-            assertEquals(randomStatus, deck[randomCard].status)
-        }
-
-        // Restoring the initial deck state
-        DeckOfCards.getDeckOfSize(DeckOfCards.DeckSize.FIFTY_TWO)
-            .forEach { it.status = Card.Status.TABLE }
     }
 }
