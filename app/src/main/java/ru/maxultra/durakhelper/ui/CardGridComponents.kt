@@ -1,6 +1,5 @@
 package ru.maxultra.durakhelper.ui
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,6 +9,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,30 +22,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import ru.maxultra.durakhelper.DeckViewModel
 import ru.maxultra.durakhelper.R
 import ru.maxultra.durakhelper.model.Card
+import ru.maxultra.durakhelper.model.CardStatus
 import ru.maxultra.durakhelper.model.DeckOfCards
 
 
 @Composable
-fun CardComponent(card: Card, cardWidth: Dp, cardHeight: Dp, onClick: (Card) -> Unit) {
-    if (card.status != Card.Status.DISCARD) {
-        val color = when (card.status) {
-            Card.Status.TABLE -> TableCardColor
-            Card.Status.MINE -> MyColor
-            Card.Status.FRIEND -> FriendColor
-            Card.Status.ENEMY -> EnemyColor
+fun CardComponent(
+    index: Int,
+    card: Card,
+    status: CardStatus,
+    cardWidth: Dp,
+    cardHeight: Dp,
+    onClick: (Int) -> Unit
+) {
+    if (status != CardStatus.DISCARD) {
+        val color = when (status) {
+            CardStatus.TABLE -> TableCardColor
+            CardStatus.MINE -> MyColor
+            CardStatus.FRIEND -> FriendColor
+            CardStatus.ENEMY -> EnemyColor
             else -> InGameColor
         }
-        Log.d("CardComponent", "Status ${card.status}, color $color")
         val suitIconId = when (card.suit) {
             Card.Suit.CLUBS -> R.drawable.clubs
             Card.Suit.SPADES -> R.drawable.spades
             Card.Suit.DIAMONDS -> R.drawable.diamonds
             Card.Suit.HEARTS -> R.drawable.hearts
         }
-        val fontWeight =
-            if (card.status == Card.Status.IN_GAME) FontWeight.Bold else FontWeight.Normal
+        val fontWeight = if (status == CardStatus.IN_GAME) FontWeight.Bold else FontWeight.Normal
         Surface(
             color = color,
             shape = RoundedCornerShape(8.dp),
@@ -59,7 +67,7 @@ fun CardComponent(card: Card, cardWidth: Dp, cardHeight: Dp, onClick: (Card) -> 
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .clickable { onClick(card) }
+                    .clickable { onClick(index) }
                     .padding(8.dp)
             ) {
                 BoxWithConstraints(
@@ -90,24 +98,32 @@ fun CardComponent(card: Card, cardWidth: Dp, cardHeight: Dp, onClick: (Card) -> 
                 )
             }
         }
+    } else {
+        Box(
+            modifier = Modifier
+                .width(cardWidth)
+                .requiredHeightIn(0.dp, cardWidth)
+                .height(cardHeight)
+                .clickable { onClick(index) }
+        )
     }
 }
 
 @Composable
 fun CardColumnComponent(
-    deck: List<Card>,
+    viewModel: DeckViewModel,
     suit: Card.Suit,
-    trumpSuit: Card.Suit?,
     cardWidth: Dp,
-    cardHeight: Dp,
-    onClick: (Card) -> Unit
+    cardHeight: Dp
 ) {
+    val trumpSuit by viewModel.trumpSuitLiveData.observeAsState(null)
     val backgroundColor = if (trumpSuit == suit) {
         when (trumpSuit) {
             Card.Suit.DIAMONDS -> RedSuitColor
             Card.Suit.HEARTS -> RedSuitColor
             Card.Suit.SPADES -> BlackSuitColor
             Card.Suit.CLUBS -> BlackSuitColor
+            null -> Color.Transparent
         }
     } else {
         Color.Transparent
@@ -117,38 +133,41 @@ fun CardColumnComponent(
             .fillMaxHeight()
             .background(backgroundColor)
     ) {
-        deck.forEach { card ->
+        val deck by viewModel.deckLiveData.observeAsState(emptyList())
+        val deckStatus by viewModel.statusLiveData.observeAsState(emptyList())
+        deck.forEachIndexed { index, card ->
             if (card.suit == suit)
                 CardComponent(
+                    index = index,
                     card = card,
+                    status = deckStatus[index],
                     cardWidth = cardWidth,
                     cardHeight = cardHeight,
-                    onClick = onClick
+                    onClick = { viewModel.onCardClick(index) }
                 )
         }
     }
 }
 
 @Composable
-fun CardGridComponent(deck: List<Card>, onClick: (Card) -> Unit, trumpSuit: Card.Suit? = null) {
+fun CardGridComponent(viewModel: DeckViewModel) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .background(TableColor)
     ) {
+        val deckSize by viewModel.deckSizeLiveData.observeAsState(DeckOfCards.DeckSize.THIRTY_SIX)
         val w = maxWidth / 4
-        val h = maxHeight / (deck.size / 4)
+        val h = maxHeight / (deckSize.asInt / 4)
         Row(
             modifier = Modifier.fillMaxSize()
         ) {
             Card.Suit.values().forEach { suit ->
                 CardColumnComponent(
-                    deck = deck,
+                    viewModel = viewModel,
                     suit = suit,
-                    trumpSuit = trumpSuit,
                     cardWidth = w,
-                    cardHeight = h,
-                    onClick = onClick
+                    cardHeight = h
                 )
             }
         }
@@ -159,5 +178,5 @@ fun CardGridComponent(deck: List<Card>, onClick: (Card) -> Unit, trumpSuit: Card
 @Composable
 @Preview
 fun DefaultPreview() {
-    CardGridComponent(DeckOfCards.getDeckOfSize(DeckOfCards.DeckSize.TWENTY_FOUR), {})
+//    CardGridComponent(DeckOfCards.getDeckOfSize(DeckOfCards.DeckSize.TWENTY_FOUR), {})
 }
