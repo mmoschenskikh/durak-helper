@@ -9,6 +9,7 @@ val FriendColor = Color(0xFF44BD32)
 val EnemyColor = Color(0xFFC23616)
 val InGameColor = Color(0xFFFBC531)
 val TableCardColor = Color(0xFFF5F6FA)
+val DiscardColor = Color(0xFF7F8FA6)
 
 val BlackSuitColor = Color(0xFF515262)
 val RedSuitColor = Color(0xFFFF6464)
