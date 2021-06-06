@@ -1,25 +1,45 @@
 package ru.maxultra.durakhelper
 
-import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import ru.maxultra.durakhelper.model.Card
+import ru.maxultra.durakhelper.model.CardStatus
 import ru.maxultra.durakhelper.model.DeckOfCards
 
 class DeckViewModel : ViewModel() {
     // TODO: Deck size settings
-    val deckSize: Int
-        get() = 36
+    private val _deckSizeLiveData = MutableLiveData(DeckOfCards.DeckSize.THIRTY_SIX)
+    val deckSizeLiveData: LiveData<DeckOfCards.DeckSize>
+        get() = _deckSizeLiveData
 
-    val deckLiveData: MutableLiveData<List<Card>> =
-        MutableLiveData(DeckOfCards.getDeckOfSize(DeckOfCards.DeckSize.THIRTY_SIX))
+    val deckLiveData = Transformations.map(deckSizeLiveData) { DeckOfCards.getDeckOfSize(it) }
 
-    fun onCardClick(card: Card) {
-        card.status = if (card.status == Card.Status.IN_GAME)
-            Card.Status.TABLE
-        else
-            Card.Status.IN_GAME
-        deckLiveData.value = deckLiveData.value ?: emptyList()
-        Log.d("DeckViewModel", deckLiveData.value?.map { it.status }?.joinToString() ?: "")
+    private val _statusLiveData = MutableLiveData(DeckOfCards.initializeDeckStatus())
+    val statusLiveData: LiveData<List<CardStatus>>
+        get() = _statusLiveData
+
+    private val _trumpSuitLiveData = MutableLiveData<Card.Suit?>(null)
+    val trumpSuitLiveData: LiveData<Card.Suit?>
+        get() = _trumpSuitLiveData
+
+    fun onCardClick(index: Int) {
+        _statusLiveData.value?.let { deckStatus ->
+            val newStatus = if (deckStatus[index] == CardStatus.IN_GAME)
+                CardStatus.TABLE
+            else
+                CardStatus.IN_GAME
+            _statusLiveData.value = deckStatus.mapIndexed { i, oldStatus ->
+                if (i == index) newStatus else oldStatus
+            }
+        }
+    }
+
+    fun resetDeckStatus() {
+        _statusLiveData.value?.let { deckStatus ->
+            _statusLiveData.value = deckStatus.map { CardStatus.TABLE }
+        }
+        _trumpSuitLiveData.value = null
     }
 }
