@@ -72,7 +72,7 @@ fun BottomBarComponent(width: Dp, viewModel: DeckViewModel) {
             status = CardStatus.FRIEND,
             style = textStyle,
             onTextLayout = onTextLayout
-        ) {}
+        ) { /*TODO()*/ }
         BottomBarButton(
             width = width,
             text = stringResource(id = R.string.my_cards_label),
@@ -80,7 +80,7 @@ fun BottomBarComponent(width: Dp, viewModel: DeckViewModel) {
             status = CardStatus.MINE,
             style = textStyle,
             onTextLayout = onTextLayout
-        ) {}
+        ) { /*TODO()*/ }
         BottomBarButton(
             width = width,
             text = stringResource(id = R.string.enemy_cards_label),
@@ -88,7 +88,7 @@ fun BottomBarComponent(width: Dp, viewModel: DeckViewModel) {
             status = CardStatus.ENEMY,
             style = textStyle,
             onTextLayout = onTextLayout
-        ) {}
+        ) { /*TODO()*/ }
         BottomBarButton(
             width = width,
             text = stringResource(id = R.string.discard_cards_label),
@@ -96,6 +96,6 @@ fun BottomBarComponent(width: Dp, viewModel: DeckViewModel) {
             status = CardStatus.DISCARD,
             style = textStyle,
             onTextLayout = onTextLayout
-        ) {}
+        ) { /*TODO()*/ }
     }
 }

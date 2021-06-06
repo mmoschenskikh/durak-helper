@@ -26,7 +26,6 @@ import ru.maxultra.durakhelper.DeckViewModel
 import ru.maxultra.durakhelper.R
 import ru.maxultra.durakhelper.model.Card
 import ru.maxultra.durakhelper.model.CardStatus
-import ru.maxultra.durakhelper.model.DeckOfCards
 
 
 @Composable
@@ -129,9 +128,7 @@ fun CardColumnComponent(
         Color.Transparent
     }
     Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .background(backgroundColor)
+        modifier = Modifier.background(backgroundColor)
     ) {
         val deck by viewModel.deckLiveData.observeAsState(emptyList())
         val deckStatus by viewModel.statusLiveData.observeAsState(emptyList())
@@ -150,26 +147,15 @@ fun CardColumnComponent(
 }
 
 @Composable
-fun CardGridComponent(viewModel: DeckViewModel) {
-    BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(TableColor)
-    ) {
-        val deckSize by viewModel.deckSizeLiveData.observeAsState(DeckOfCards.DeckSize.THIRTY_SIX)
-        val w = maxWidth / 4
-        val h = maxHeight / (deckSize.asInt / 4)
-        Row(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Card.Suit.values().forEach { suit ->
-                CardColumnComponent(
-                    viewModel = viewModel,
-                    suit = suit,
-                    cardWidth = w,
-                    cardHeight = h
-                )
-            }
+fun CardGridComponent(cardWidth: Dp, cardHeight: Dp, viewModel: DeckViewModel) {
+    Row {
+        Card.Suit.values().forEach { suit ->
+            CardColumnComponent(
+                viewModel = viewModel,
+                suit = suit,
+                cardWidth = cardWidth,
+                cardHeight = cardHeight
+            )
         }
     }
 }
