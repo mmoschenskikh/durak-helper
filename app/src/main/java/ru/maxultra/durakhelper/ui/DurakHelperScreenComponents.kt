@@ -13,17 +13,20 @@ import ru.maxultra.durakhelper.model.DeckOfCards
 
 @Composable
 fun DurakHelperScreen(viewModel: DeckViewModel) {
-    BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(TableColor)
-    ) {
-        val deckSize by viewModel.deckSizeLiveData.observeAsState(DeckOfCards.DeckSize.THIRTY_SIX)
-        val w = maxWidth / 4
-        val h = maxHeight / (deckSize.asInt / 4 + 1)
-        Column(modifier = Modifier.fillMaxSize()) {
-            CardGridComponent(cardWidth = w, cardHeight = h, viewModel = viewModel)
-            BottomBarComponent(width = w, viewModel = viewModel)
+    Column(modifier = Modifier.fillMaxSize()) {
+        DurakTopAppBar(viewModel = viewModel)
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(TableColor)
+        ) {
+            val deckSize by viewModel.deckSizeLiveData.observeAsState(DeckOfCards.DeckSize.THIRTY_SIX)
+            val w = maxWidth / 4
+            val h = maxHeight / (deckSize.asInt / 4 + 1)
+            Column(modifier = Modifier.fillMaxSize()) {
+                CardGridComponent(cardWidth = w, cardHeight = h, viewModel = viewModel)
+                BottomBarComponent(width = w, viewModel = viewModel)
+            }
         }
     }
 }
