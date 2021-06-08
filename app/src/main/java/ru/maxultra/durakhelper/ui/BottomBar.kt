@@ -8,6 +8,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -26,6 +27,7 @@ import ru.maxultra.durakhelper.model.CardStatus
 @Composable
 fun BottomBarButton(
     width: Dp,
+    height: Dp,
     text: String,
     color: Color,
     style: TextStyle,
@@ -40,8 +42,9 @@ fun BottomBarButton(
             contentColor = Color.White
         ),
         modifier = Modifier
-            .fillMaxHeight()
             .width(width)
+            .requiredHeightIn(0.dp, width)
+            .height(height)
             .padding(4.dp)
     ) {
         Text(
@@ -56,7 +59,7 @@ fun BottomBarButton(
 }
 
 @Composable
-fun BottomBarComponent(width: Dp, viewModel: DeckViewModel) {
+fun BottomBarComponent(buttonWidth: Dp, buttonHeight: Dp, viewModel: DeckViewModel) {
     val typography = MaterialTheme.typography.button
     val (textStyle, updateTextStyle) = remember { mutableStateOf(typography) }
     val onTextLayout: (TextLayoutResult) -> Unit = { textLayoutResult ->
@@ -64,9 +67,13 @@ fun BottomBarComponent(width: Dp, viewModel: DeckViewModel) {
             updateTextStyle(textStyle.copy(fontSize = textStyle.fontSize * 0.9))
         }
     }
-    Row(modifier = Modifier.fillMaxSize()) {
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        verticalAlignment = Alignment.Bottom
+    ) {
         BottomBarButton(
-            width = width,
+            width = buttonWidth,
+            height = buttonHeight,
             text = stringResource(id = R.string.friend_cards_label),
             color = FriendColor,
             status = CardStatus.FRIEND,
@@ -74,7 +81,8 @@ fun BottomBarComponent(width: Dp, viewModel: DeckViewModel) {
             onTextLayout = onTextLayout
         ) { viewModel.onBottomButtonClick(CardStatus.FRIEND) }
         BottomBarButton(
-            width = width,
+            width = buttonWidth,
+            height = buttonHeight,
             text = stringResource(id = R.string.my_cards_label),
             color = MyColor,
             status = CardStatus.MINE,
@@ -82,7 +90,8 @@ fun BottomBarComponent(width: Dp, viewModel: DeckViewModel) {
             onTextLayout = onTextLayout
         ) { viewModel.onBottomButtonClick(CardStatus.MINE) }
         BottomBarButton(
-            width = width,
+            width = buttonWidth,
+            height = buttonHeight,
             text = stringResource(id = R.string.enemy_cards_label),
             color = EnemyColor,
             status = CardStatus.ENEMY,
@@ -90,7 +99,8 @@ fun BottomBarComponent(width: Dp, viewModel: DeckViewModel) {
             onTextLayout = onTextLayout
         ) { viewModel.onBottomButtonClick(CardStatus.ENEMY) }
         BottomBarButton(
-            width = width,
+            width = buttonWidth,
+            height = buttonHeight,
             text = stringResource(id = R.string.discard_cards_label),
             color = DiscardColor,
             status = CardStatus.DISCARD,

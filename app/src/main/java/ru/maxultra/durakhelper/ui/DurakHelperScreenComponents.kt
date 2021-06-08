@@ -30,7 +30,8 @@ fun DurakHelperScreen(viewModel: DeckViewModel) {
             val h = maxHeight / (deckSize.asInt / 4 + 1)
             Column(modifier = Modifier.fillMaxSize()) {
                 CardGridComponent(cardWidth = w, cardHeight = h, viewModel = viewModel)
-                BottomBarComponent(width = w, viewModel = viewModel)
+                // FIXME: Bottom buttons size should be the same for any deck size
+                BottomBarComponent(buttonWidth = w, buttonHeight = h, viewModel = viewModel)
             }
         }
         ResetDialog(
