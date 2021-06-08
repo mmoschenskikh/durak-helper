@@ -36,6 +36,14 @@ class DeckViewModel : ViewModel() {
         }
     }
 
+    fun onBottomButtonClick(status: CardStatus) {
+        _statusLiveData.value?.let { deckStatus ->
+            _statusLiveData.value = deckStatus.map { oldStatus ->
+                if (oldStatus == CardStatus.IN_GAME) status else oldStatus
+            }
+        }
+    }
+
     fun resetDeckStatus() {
         _statusLiveData.value?.let { deckStatus ->
             _statusLiveData.value = deckStatus.map { CardStatus.TABLE }
