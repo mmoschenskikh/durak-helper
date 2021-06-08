@@ -42,9 +42,7 @@ class DeckViewModel : ViewModel() {
                 CardStatus.TABLE
             else
                 CardStatus.IN_GAME
-            _statusLiveData.value = deckStatus.mapIndexed { i, oldStatus ->
-                if (i == index) newStatus else oldStatus
-            }
+            _statusLiveData.value = deckStatus.toMutableList().also { it[index] = newStatus }
         }
     }
 
