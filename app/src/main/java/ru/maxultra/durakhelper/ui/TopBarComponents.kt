@@ -15,11 +15,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import ru.maxultra.durakhelper.DeckViewModel
 import ru.maxultra.durakhelper.R
 
 @Composable
-fun DurakTopAppBar(viewModel: DeckViewModel) {
+fun DurakTopAppBar(onResetClick: () -> Unit) {
     TopAppBar(
         title = { TopAppBarTitle() },
         actions = {
@@ -29,7 +28,7 @@ fun DurakTopAppBar(viewModel: DeckViewModel) {
                 modifier = Modifier
                     .fillMaxHeight(0.67f)
                     .aspectRatio(1f)
-                    .clickable { viewModel.resetDeckStatus() }
+                    .clickable { onResetClick() }
             )
         },
         backgroundColor = MazarineBlue,

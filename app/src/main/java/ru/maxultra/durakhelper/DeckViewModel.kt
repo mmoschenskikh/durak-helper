@@ -20,6 +20,10 @@ class DeckViewModel : ViewModel() {
     val statusLiveData: LiveData<List<CardStatus>>
         get() = _statusLiveData
 
+    val isDeckChanged = Transformations.map(statusLiveData) { deckStatus ->
+        deckStatus.any { it != CardStatus.TABLE }
+    }
+
     private val _trumpSuitLiveData = MutableLiveData<Card.Suit?>(null)
     val trumpSuitLiveData: LiveData<Card.Suit?>
         get() = _trumpSuitLiveData

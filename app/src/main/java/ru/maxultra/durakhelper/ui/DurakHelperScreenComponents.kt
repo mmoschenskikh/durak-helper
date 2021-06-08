@@ -7,14 +7,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import ru.maxultra.durakhelper.DeckViewModel
 import ru.maxultra.durakhelper.model.DeckOfCards
 
 @Composable
 fun DurakHelperScreen(viewModel: DeckViewModel) {
+    val deckIsChanged by viewModel.isDeckChanged.observeAsState(false)
+    val (resetRequested, setResetRequested) = remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxSize()) {
-        DurakTopAppBar(viewModel = viewModel)
+        DurakTopAppBar(onResetClick = { setResetRequested(deckIsChanged) })
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
@@ -28,5 +32,10 @@ fun DurakHelperScreen(viewModel: DeckViewModel) {
                 BottomBarComponent(width = w, viewModel = viewModel)
             }
         }
+        ResetDialog(
+            showDialog = resetRequested,
+            setShowDialog = { setResetRequested(it) },
+            onYesAction = { viewModel.resetDeckStatus() }
+        )
     }
 }
