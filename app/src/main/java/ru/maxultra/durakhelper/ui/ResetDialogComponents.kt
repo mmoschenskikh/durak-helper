@@ -11,7 +11,12 @@ import androidx.compose.ui.res.stringResource
 import ru.maxultra.durakhelper.R
 
 @Composable
-fun ResetDialog(showDialog: Boolean, setShowDialog: (Boolean) -> Unit, onYesAction: () -> Unit) {
+fun ResetDialog(
+    showDialog: Boolean,
+    setShowDialog: (Boolean) -> Unit,
+    onYesAction: () -> Unit,
+    onCancelAction: () -> Unit = {}
+) {
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { setShowDialog(false) },
@@ -30,6 +35,7 @@ fun ResetDialog(showDialog: Boolean, setShowDialog: (Boolean) -> Unit, onYesActi
                 ResetDialogButton(
                     text = R.string.no_button,
                     onClick = {
+                        onCancelAction()
                         setShowDialog(false)
                     }
                 )

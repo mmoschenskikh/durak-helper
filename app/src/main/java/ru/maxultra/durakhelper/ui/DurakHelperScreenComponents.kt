@@ -16,6 +16,7 @@ import ru.maxultra.durakhelper.model.DeckOfCards
 @Composable
 fun DurakHelperScreen(viewModel: DeckViewModel) {
     val deckIsChanged by viewModel.isDeckChanged.observeAsState(false)
+    val exitRequested by viewModel.isExitRequested.observeAsState(false)
     val (resetRequested, setResetRequested) = remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxSize()) {
         DurakTopAppBar(onResetClick = { setResetRequested(deckIsChanged) })
@@ -33,9 +34,16 @@ fun DurakHelperScreen(viewModel: DeckViewModel) {
             }
         }
         ResetDialog(
-            showDialog = resetRequested,
+            showDialog = resetRequested || exitRequested,
             setShowDialog = { setResetRequested(it) },
-            onYesAction = { viewModel.resetDeckStatus() }
+            onYesAction = {
+                if (exitRequested) {
+                    viewModel.exitDurakHelper()
+                } else {
+                    viewModel.resetDeckStatus()
+                }
+            },
+            onCancelAction = { viewModel.cancelExitRequest() }
         )
     }
 }

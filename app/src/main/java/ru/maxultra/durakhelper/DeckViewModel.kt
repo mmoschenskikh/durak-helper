@@ -28,6 +28,14 @@ class DeckViewModel : ViewModel() {
     val trumpSuitLiveData: LiveData<Card.Suit?>
         get() = _trumpSuitLiveData
 
+    private val _isExitRequested = MutableLiveData(false)
+    val isExitRequested: LiveData<Boolean>
+        get() = _isExitRequested
+
+    private val _isExiting = MutableLiveData(false)
+    val isExiting: LiveData<Boolean>
+        get() = _isExiting
+
     fun onCardClick(index: Int) {
         _statusLiveData.value?.let { deckStatus ->
             val newStatus = if (deckStatus[index] == CardStatus.IN_GAME)
@@ -53,5 +61,20 @@ class DeckViewModel : ViewModel() {
             _statusLiveData.value = deckStatus.map { CardStatus.TABLE }
         }
         _trumpSuitLiveData.value = null
+    }
+
+    fun requestExit() {
+        if (isDeckChanged.value == false)
+            exitDurakHelper()
+        else
+            _isExitRequested.value = true
+    }
+
+    fun cancelExitRequest() {
+        _isExitRequested.value = false
+    }
+
+    fun exitDurakHelper() {
+        _isExiting.value = true
     }
 }

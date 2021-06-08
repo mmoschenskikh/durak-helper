@@ -15,9 +15,13 @@ class MainActivity : AppCompatActivity() {
         setContent {
             DurakHelperScreen(viewModel = viewModel)
         }
+
+        viewModel.isExiting.observe(this) {
+            if (it == true) finish()
+        }
     }
 
     override fun onBackPressed() {
-        ConfirmDialog.show(this) { super.onBackPressed() }
+        viewModel.requestExit()
     }
 }
