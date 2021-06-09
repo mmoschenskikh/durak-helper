@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="new_game_button" translatable="false">Новая игра</string>
+    <string name="new_game_button">Новая игра</string>
     <string name="my_cards_label">Мои</string>
     <string name="friend_cards_label">Друга</string>
     <string name="enemy_cards_label">Врага</string>

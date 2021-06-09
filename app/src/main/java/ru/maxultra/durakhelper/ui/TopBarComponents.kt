@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import ru.maxultra.durakhelper.R
 
 @Composable
@@ -49,7 +48,3 @@ sealed class MenuAction(
     object Restart : MenuAction(R.string.new_game_button, Icons.Default.RestartAlt)
 }
 
-@Composable
-@Preview
-fun TopBarPreview() {
-}

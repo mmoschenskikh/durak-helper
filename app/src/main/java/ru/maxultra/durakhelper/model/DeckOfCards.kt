@@ -29,12 +29,4 @@ object DeckOfCards {
      * Returns the deck of size [size].
      */
     fun getDeckOfSize(size: DeckSize) = deck.subList(0, size.asInt)
-
-    fun initializeDeckStatus(): List<CardStatus> {
-        val statusList = ArrayList<CardStatus>(biggestDeckSize)
-        for (i in 0 until biggestDeckSize) {
-            statusList.add(CardStatus.TABLE)
-        }
-        return statusList.toList()
-    }
 }
