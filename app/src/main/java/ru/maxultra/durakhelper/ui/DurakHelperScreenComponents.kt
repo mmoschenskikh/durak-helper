@@ -15,11 +15,10 @@ import ru.maxultra.durakhelper.model.DeckOfCards
 
 @Composable
 fun DurakHelperScreen(viewModel: DeckViewModel) {
-    val deckIsChanged by viewModel.isDeckChanged.observeAsState(false)
     val exitRequested by viewModel.isExitRequested.observeAsState(false)
     val (resetRequested, setResetRequested) = remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxSize()) {
-        DurakTopAppBar(onResetClick = { setResetRequested(deckIsChanged) })
+        DurakTopAppBar(onResetClick = { setResetRequested(viewModel.isDeckChanged) })
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()

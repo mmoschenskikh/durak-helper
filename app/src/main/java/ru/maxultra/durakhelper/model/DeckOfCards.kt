@@ -10,7 +10,7 @@ object DeckOfCards {
     /**
      * Returns the largest deck size value defined in [DeckSize] enumeration.
      */
-    private val biggestDeckSize: Int by lazy {
+    val biggestDeckSize: Int by lazy {
         DeckSize.values().maxByOrNull { it.asInt }?.asInt
             ?: throw IllegalStateException("No deck sizes defined.")
     }

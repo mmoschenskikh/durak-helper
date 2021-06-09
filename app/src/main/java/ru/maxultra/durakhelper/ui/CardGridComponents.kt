@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -32,11 +33,12 @@ import ru.maxultra.durakhelper.model.CardStatus
 fun CardComponent(
     index: Int,
     card: Card,
-    status: CardStatus,
+    statusState: State<CardStatus>,
     cardWidth: Dp,
     cardHeight: Dp,
     onClick: (Int) -> Unit
 ) {
+    val status by statusState
     if (status != CardStatus.DISCARD) {
         val color = when (status) {
             CardStatus.TABLE -> TableCardColor
@@ -131,13 +133,12 @@ fun CardColumnComponent(
         modifier = Modifier.background(backgroundColor)
     ) {
         val deck by viewModel.deckLiveData.observeAsState(emptyList())
-        val deckStatus by viewModel.statusLiveData.observeAsState(emptyList())
         deck.forEachIndexed { index, card ->
             if (card.suit == suit)
                 CardComponent(
                     index = index,
                     card = card,
-                    status = deckStatus[index],
+                    statusState = viewModel.state[index],
                     cardWidth = cardWidth,
                     cardHeight = cardHeight,
                     onClick = { viewModel.onCardClick(index) }

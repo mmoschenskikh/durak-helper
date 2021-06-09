@@ -1,5 +1,6 @@
 package ru.maxultra.durakhelper
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -16,14 +17,6 @@ class DeckViewModel : ViewModel() {
 
     val deckLiveData = Transformations.map(deckSizeLiveData) { DeckOfCards.getDeckOfSize(it) }
 
-    private val _statusLiveData = MutableLiveData(DeckOfCards.initializeDeckStatus())
-    val statusLiveData: LiveData<List<CardStatus>>
-        get() = _statusLiveData
-
-    val isDeckChanged = Transformations.map(statusLiveData) { deckStatus ->
-        deckStatus.any { it != CardStatus.TABLE }
-    }
-
     private val _trumpSuitLiveData = MutableLiveData<Card.Suit?>(null)
     val trumpSuitLiveData: LiveData<Card.Suit?>
         get() = _trumpSuitLiveData
@@ -36,36 +29,35 @@ class DeckViewModel : ViewModel() {
     val isExiting: LiveData<Boolean>
         get() = _isExiting
 
+    val state = Array(DeckOfCards.biggestDeckSize) { mutableStateOf(CardStatus.TABLE) }
+    val isDeckChanged: Boolean
+        get() = state.any { it.value != CardStatus.TABLE }
+
     fun onCardClick(index: Int) {
-        _statusLiveData.value?.let { deckStatus ->
-            val newStatus = if (deckStatus[index] == CardStatus.IN_GAME)
+        state[index].value =
+            if (state[index].value == CardStatus.IN_GAME)
                 CardStatus.TABLE
             else
                 CardStatus.IN_GAME
-            _statusLiveData.value = deckStatus.toMutableList().also { it[index] = newStatus }
-        }
     }
 
     fun onBottomButtonClick(status: CardStatus) {
-        _statusLiveData.value?.let { deckStatus ->
-            _statusLiveData.value = deckStatus.map { oldStatus ->
-                if (oldStatus == CardStatus.IN_GAME) status else oldStatus
-            }
+        state.forEach {
+            if (it.value == CardStatus.IN_GAME)
+                it.value = status
         }
     }
 
     fun resetDeckStatus() {
-        _statusLiveData.value?.let { deckStatus ->
-            _statusLiveData.value = deckStatus.map { CardStatus.TABLE }
-        }
+        state.forEach { it.value = CardStatus.TABLE }
         _trumpSuitLiveData.value = null
     }
 
     fun requestExit() {
-        if (isDeckChanged.value == false)
-            exitDurakHelper()
-        else
+        if (isDeckChanged)
             _isExitRequested.value = true
+        else
+            exitDurakHelper()
     }
 
     fun cancelExitRequest() {
