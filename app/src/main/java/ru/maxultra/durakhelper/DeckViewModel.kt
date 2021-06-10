@@ -31,7 +31,7 @@ class DeckViewModel : ViewModel() {
 
     val state = Array(DeckOfCards.biggestDeckSize) { mutableStateOf(CardStatus.TABLE) }
     val isDeckChanged: Boolean
-        get() = state.any { it.value != CardStatus.TABLE }
+        get() = trumpSuitLiveData.value != null || state.any { it.value != CardStatus.TABLE }
 
     fun onCardClick(index: Int) {
         state[index].value =
