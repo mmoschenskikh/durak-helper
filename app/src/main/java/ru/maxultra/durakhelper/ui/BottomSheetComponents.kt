@@ -8,8 +8,12 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,13 +26,13 @@ fun BottomSheetPull() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(16.dp),
+            .height(20.dp),
         contentAlignment = Alignment.Center
     ) {
         Divider(
             modifier = Modifier
                 .width(64.dp)
-                .padding(vertical = 6.dp),
+                .padding(vertical = 8.dp),
             thickness = 4.dp
         )
     }
@@ -36,40 +40,70 @@ fun BottomSheetPull() {
 
 @Composable
 fun TrumpSuitChooser(viewModel: DeckViewModel) {
+    val trumpSuit by viewModel.trumpSuitLiveData.observeAsState(null)
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp)
+            .wrapContentHeight()
+            .padding(bottom = 16.dp)
     ) {
-        Text(
-            text = "Choose trump suit",
-            style = MaterialTheme.typography.subtitle1,
-            fontFamily = montserrat,
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 8.dp)
-        )
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Choose trump suit",
+                style = MaterialTheme.typography.h6,
+                fontFamily = montserrat,
+                modifier = Modifier.padding(start = 20.dp, bottom = 8.dp)
+            )
+            if (trumpSuit != null) {
+                Text(
+                    text = "Reset",
+                    style = MaterialTheme.typography.subtitle1,
+                    color = Naval,
+                    fontFamily = montserrat,
+                    modifier = Modifier
+                        .clickable { viewModel.setTrumpSuit(null) }
+                        .padding(start = 20.dp, end = 20.dp, bottom = 8.dp)
+                )
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             SuitIconComponent(
                 suitIconId = R.drawable.diamonds,
                 modifier = Modifier.weight(1f),
-                onClick = { viewModel.setTrumpSuit(Card.Suit.DIAMONDS) }
+                suit = Card.Suit.DIAMONDS,
+                trumpSuit = trumpSuit,
+                onClick = { viewModel.setTrumpSuit(it) }
             )
             SuitIconComponent(
                 suitIconId = R.drawable.clubs,
                 modifier = Modifier.weight(1f),
-                onClick = { viewModel.setTrumpSuit(Card.Suit.CLUBS) }
+                suit = Card.Suit.CLUBS,
+                trumpSuit = trumpSuit,
+                onClick = { viewModel.setTrumpSuit(it) }
             )
             SuitIconComponent(
                 suitIconId = R.drawable.hearts,
                 modifier = Modifier.weight(1f),
-                onClick = { viewModel.setTrumpSuit(Card.Suit.HEARTS) }
+                suit = Card.Suit.HEARTS,
+                trumpSuit = trumpSuit,
+                onClick = { viewModel.setTrumpSuit(it) }
             )
             SuitIconComponent(
                 suitIconId = R.drawable.spades,
                 modifier = Modifier.weight(1f),
-                onClick = { viewModel.setTrumpSuit(Card.Suit.SPADES) }
+                suit = Card.Suit.SPADES,
+                trumpSuit = trumpSuit,
+                onClick = { viewModel.setTrumpSuit(it) }
             )
         }
     }
@@ -79,15 +113,25 @@ fun TrumpSuitChooser(viewModel: DeckViewModel) {
 fun SuitIconComponent(
     @DrawableRes suitIconId: Int,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    suit: Card.Suit,
+    trumpSuit: Card.Suit?,
+    onClick: (Card.Suit?) -> Unit = {}
 ) {
     Image(
         painter = painterResource(id = suitIconId),
         contentDescription = null,
         modifier = modifier
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp)
-            .aspectRatio(1f),
+            .clickable {
+                if (trumpSuit == suit)
+                    onClick(null)
+                else
+                    onClick(suit)
+            },
+        colorFilter =
+        if (trumpSuit == suit)
+            null
+        else
+            ColorFilter.lighting(Color.Black, Color.Black)
     )
 }
 

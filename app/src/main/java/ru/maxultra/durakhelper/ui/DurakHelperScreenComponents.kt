@@ -28,7 +28,7 @@ fun DurakHelperScreen(viewModel: DeckViewModel) {
     BottomSheetScaffold(
         modifier = Modifier.fillMaxSize(),
         sheetContent = { BottomSheet(viewModel = viewModel) },
-        sheetPeekHeight = 16.dp,
+        sheetPeekHeight = 20.dp,
         sheetBackgroundColor = Color.White,
         sheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         topBar = { DurakTopAppBar(onResetClick = { setResetRequested(viewModel.isDeckChanged) }) },
