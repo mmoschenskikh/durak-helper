@@ -9,8 +9,6 @@
     <string name="alert_question">All the progress will be lost</string>
     <string name="yes_button">Yes</string>
     <string name="no_button">No</string>
-    <string name="trump_diamonds">Trump: diamonds (♦)</string>
-    <string name="trump_clubs">Trump: clubs (♣)</string>
-    <string name="trump_hearts">Trump: hearts (♥)</string>
-    <string name="trump_spades">Trump: spades (♠)</string>
+    <string name="choose_trump_suit">Choose trump suit</string>
+    <string name="reset_trump_suit">Reset</string>
 </resources>

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.maxultra.durakhelper.DeckViewModel
@@ -53,14 +54,14 @@ fun TrumpSuitChooser(viewModel: DeckViewModel) {
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Choose trump suit",
+                text = stringResource(R.string.choose_trump_suit),
                 style = MaterialTheme.typography.h6,
                 fontFamily = montserrat,
                 modifier = Modifier.padding(start = 20.dp, bottom = 8.dp)
             )
             if (trumpSuit != null) {
                 Text(
-                    text = "Reset",
+                    text = stringResource(R.string.reset_trump_suit),
                     style = MaterialTheme.typography.subtitle1,
                     color = Naval,
                     fontFamily = montserrat,
