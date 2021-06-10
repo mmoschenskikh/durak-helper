@@ -18,3 +18,6 @@ New game | Two players (1vs1) | Three players |
 
 ## Usage
 When playing durak card game, you should register all the cards you see using the app. By the end of the game you will know all the cards the opponents have. In most cases the right strategy choosing will let you win.
+
+## Acknowledgements
+Suit icons made by [Freepik from www.flaticon.com](https://www.flaticon.com/authors/freepik)
