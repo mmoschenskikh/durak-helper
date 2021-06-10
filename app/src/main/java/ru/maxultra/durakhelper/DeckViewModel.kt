@@ -48,6 +48,10 @@ class DeckViewModel : ViewModel() {
         }
     }
 
+    fun setTrumpSuit(suit: Card.Suit?) {
+        _trumpSuitLiveData.value = suit
+    }
+
     fun resetDeckStatus() {
         state.forEach { it.value = CardStatus.TABLE }
         _trumpSuitLiveData.value = null

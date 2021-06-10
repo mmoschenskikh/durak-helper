@@ -49,7 +49,7 @@ fun BottomBarButton(
     ) {
         Text(
             text = text.uppercase(),
-            fontFamily = FontFamily(Font(R.font.montserrat)),
+            fontFamily = montserrat,
             style = style,
             overflow = TextOverflow.Clip,
             maxLines = 1,
