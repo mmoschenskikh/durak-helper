@@ -41,10 +41,7 @@ fun TopAppBarTitle() {
     Text(text = stringResource(R.string.app_name))
 }
 
-sealed class MenuAction(
-    @StringRes val label: Int,
-    val icon: ImageVector
-) {
+sealed class MenuAction(@StringRes val label: Int, val icon: ImageVector) {
     object Restart : MenuAction(R.string.new_game_button, Icons.Default.RestartAlt)
 }
 

@@ -15,5 +15,5 @@ val InGameColor = Color(0xFFFBC531)
 val TableCardColor = Color(0xFFF5F6FA)
 val DiscardColor = Color(0xFF7F8FA6)
 
-val BlackSuitColor = Color(0xFF515262)
-val RedSuitColor = Color(0xFFFF6464)
+val BlackSuitColor = Color(0xFF464655)
+val RedSuitColor = Color(0xFFD2555A)

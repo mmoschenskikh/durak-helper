@@ -129,7 +129,7 @@ fun SuitIconComponent(
                     onClick(suit)
             },
         colorFilter =
-        if (trumpSuit == suit)
+        if (trumpSuit == suit || trumpSuit == null)
             null
         else
             ColorFilter.lighting(Color.Black, Color.Black)
