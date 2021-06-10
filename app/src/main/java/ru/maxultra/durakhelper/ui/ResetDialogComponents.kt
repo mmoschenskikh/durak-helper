@@ -13,13 +13,13 @@ import ru.maxultra.durakhelper.R
 @Composable
 fun ResetDialog(
     showDialog: Boolean,
-    setShowDialog: (Boolean) -> Unit,
+    hideDialog: () -> Unit,
     onYesAction: () -> Unit,
     onCancelAction: () -> Unit = {}
 ) {
     if (showDialog) {
         AlertDialog(
-            onDismissRequest = { setShowDialog(false) },
+            onDismissRequest = { hideDialog() },
             title = { Text(stringResource(R.string.alert_title)) },
             text = { Text(stringResource(R.string.alert_question)) },
             confirmButton = {
@@ -27,7 +27,7 @@ fun ResetDialog(
                     text = R.string.yes_button,
                     onClick = {
                         onYesAction()
-                        setShowDialog(false)
+                        hideDialog()
                     }
                 )
             },
@@ -36,7 +36,7 @@ fun ResetDialog(
                     text = R.string.no_button,
                     onClick = {
                         onCancelAction()
-                        setShowDialog(false)
+                        hideDialog()
                     }
                 )
             }

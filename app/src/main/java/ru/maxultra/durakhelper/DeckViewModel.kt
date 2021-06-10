@@ -21,6 +21,10 @@ class DeckViewModel : ViewModel() {
     val trumpSuitLiveData: LiveData<Card.Suit?>
         get() = _trumpSuitLiveData
 
+    private val _isResetRequested = MutableLiveData(false)
+    val isResetRequested: LiveData<Boolean>
+        get() = _isResetRequested
+
     private val _isExitRequested = MutableLiveData(false)
     val isExitRequested: LiveData<Boolean>
         get() = _isExitRequested
@@ -30,7 +34,7 @@ class DeckViewModel : ViewModel() {
         get() = _isExiting
 
     val state = Array(DeckOfCards.biggestDeckSize) { mutableStateOf(CardStatus.TABLE) }
-    val isDeckChanged: Boolean
+    private val isDeckChanged: Boolean
         get() = trumpSuitLiveData.value != null || state.any { it.value != CardStatus.TABLE }
 
     fun onCardClick(index: Int) {
@@ -55,6 +59,16 @@ class DeckViewModel : ViewModel() {
     fun resetDeckStatus() {
         state.forEach { it.value = CardStatus.TABLE }
         _trumpSuitLiveData.value = null
+        cancelResetRequest()
+    }
+
+    fun requestReset() {
+        if (isDeckChanged)
+            _isResetRequested.value = true
+    }
+
+    fun cancelResetRequest() {
+        _isResetRequested.value = false
     }
 
     fun requestExit() {

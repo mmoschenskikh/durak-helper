@@ -1,6 +1,5 @@
 package ru.maxultra.durakhelper.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,8 +9,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -21,30 +18,26 @@ import ru.maxultra.durakhelper.model.DeckOfCards
 @Composable
 @ExperimentalMaterialApi
 fun DurakHelperScreen(viewModel: DeckViewModel) {
-    val exitRequested by viewModel.isExitRequested.observeAsState(false)
-    val (resetRequested, setResetRequested) = remember { mutableStateOf(false) }
+    val resetRequested by viewModel.isResetRequested.observeAsState(false)
     val scaffoldState =
         rememberBottomSheetScaffoldState(bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed))
     BottomSheetScaffold(
         modifier = Modifier.fillMaxSize(),
+        topBar = { DurakTopAppBar(onResetClick = { viewModel.requestReset() }) },
         sheetContent = { BottomSheet(viewModel = viewModel) },
         sheetPeekHeight = 20.dp,
         sheetBackgroundColor = Color.White,
         sheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
-        topBar = { DurakTopAppBar(onResetClick = { setResetRequested(viewModel.isDeckChanged) }) },
-        sheetElevation = 8.dp,
-        scaffoldState = scaffoldState
+        sheetElevation = 16.dp,
+        scaffoldState = scaffoldState,
+        backgroundColor = TableColor
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(bottom = it.calculateBottomPadding())
         ) {
-            BoxWithConstraints(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(TableColor)
-            ) {
+            BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
                 val deckSize by viewModel.deckSizeLiveData.observeAsState(DeckOfCards.DeckSize.THIRTY_SIX)
                 val w = maxWidth / 4
                 val h = maxHeight / (deckSize.asInt / 4 + 1)
@@ -54,17 +47,20 @@ fun DurakHelperScreen(viewModel: DeckViewModel) {
                     BottomBarComponent(buttonWidth = w, buttonHeight = h, viewModel = viewModel)
                 }
             }
+            val exitRequested by viewModel.isExitRequested.observeAsState(false)
             ResetDialog(
                 showDialog = resetRequested || exitRequested,
-                setShowDialog = { setResetRequested(it) },
+                hideDialog = {
+                    viewModel.cancelResetRequest()
+                    viewModel.cancelExitRequest()
+                },
                 onYesAction = {
                     if (exitRequested) {
                         viewModel.exitDurakHelper()
                     } else {
                         viewModel.resetDeckStatus()
                     }
-                },
-                onCancelAction = { viewModel.cancelExitRequest() }
+                }
             )
         }
     }
