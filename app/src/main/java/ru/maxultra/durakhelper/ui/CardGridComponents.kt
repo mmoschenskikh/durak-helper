@@ -91,7 +91,7 @@ fun CardComponent(
                     painter = painterResource(id = suitIconId),
                     contentDescription = null,
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxHeight(0.67f)
                         .padding(horizontal = 4.dp)
                         .aspectRatio(1f),
                     contentScale = ContentScale.FillBounds
