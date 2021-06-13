@@ -5,9 +5,13 @@ Built with Jetpack Compose.
 
 ## Screenshots
 
-New game | Two players (1vs1) | Three players |
---- | --- | --- |
-![](screenshots/Screenshot_new_game.png) | ![](screenshots/Screenshot_two_players.png) | ![](screenshots/Screenshot_three_players.png)
+New game | Choosing a trump
+--- | ---
+![](screenshots/Screenshot_new_game.png)  | ![](screenshots/Screenshot_bottom_sheet.png)
+
+Three players | Two players (1vs1)
+--- | ---
+![](screenshots/Screenshot_three_players.png) | ![](screenshots/Screenshot_two_players.png)
 
 ## Built With
 
