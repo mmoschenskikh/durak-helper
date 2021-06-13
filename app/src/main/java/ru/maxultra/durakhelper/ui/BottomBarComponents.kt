@@ -71,41 +71,39 @@ fun BottomBarComponent(buttonWidth: Dp, buttonHeight: Dp, viewModel: DeckViewMod
         modifier = Modifier.fillMaxSize(),
         verticalAlignment = Alignment.Bottom
     ) {
-        BottomBarButton(
-            width = buttonWidth,
-            height = buttonHeight,
-            text = stringResource(id = R.string.friend_cards_label),
+        @Composable
+        fun ReadyBottomBarButton(@StringRes text: Int, color: Color, status: CardStatus) {
+            BottomBarButton(
+                width = buttonWidth,
+                height = buttonHeight,
+                text = stringResource(text),
+                color = color,
+                style = textStyle,
+                status = status,
+                onTextLayout = onTextLayout
+            ) {
+                viewModel.onBottomButtonClick(status)
+            }
+        }
+        ReadyBottomBarButton(
+            text = R.string.friend_cards_label,
             color = FriendColor,
-            status = CardStatus.FRIEND,
-            style = textStyle,
-            onTextLayout = onTextLayout
-        ) { viewModel.onBottomButtonClick(CardStatus.FRIEND) }
-        BottomBarButton(
-            width = buttonWidth,
-            height = buttonHeight,
-            text = stringResource(id = R.string.my_cards_label),
+            status = CardStatus.FRIEND
+        )
+        ReadyBottomBarButton(
+            text = R.string.my_cards_label,
             color = MyColor,
-            status = CardStatus.MINE,
-            style = textStyle,
-            onTextLayout = onTextLayout
-        ) { viewModel.onBottomButtonClick(CardStatus.MINE) }
-        BottomBarButton(
-            width = buttonWidth,
-            height = buttonHeight,
-            text = stringResource(id = R.string.enemy_cards_label),
+            status = CardStatus.MINE
+        )
+        ReadyBottomBarButton(
+            text = R.string.enemy_cards_label,
             color = EnemyColor,
-            status = CardStatus.ENEMY,
-            style = textStyle,
-            onTextLayout = onTextLayout
-        ) { viewModel.onBottomButtonClick(CardStatus.ENEMY) }
-        BottomBarButton(
-            width = buttonWidth,
-            height = buttonHeight,
-            text = stringResource(id = R.string.discard_cards_label),
+            status = CardStatus.ENEMY
+        )
+        ReadyBottomBarButton(
+            text = R.string.discard_cards_label,
             color = DiscardColor,
-            status = CardStatus.DISCARD,
-            style = textStyle,
-            onTextLayout = onTextLayout
-        ) { viewModel.onBottomButtonClick(CardStatus.DISCARD) }
+            status = CardStatus.DISCARD
+        )
     }
 }
