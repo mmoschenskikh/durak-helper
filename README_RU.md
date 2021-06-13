@@ -7,8 +7,10 @@
 
 Новая игра | Выбор козыря
 --- | ---
-![](screenshots/Screenshot_new_game.png)  | ![](screenshots/Screenshot_bottom_sheet.png) |
+![](screenshots/Screenshot_new_game.png)  | ![](screenshots/Screenshot_bottom_sheet.png)
+
 Три игрока | Два игрока
+--- | ---
 ![](screenshots/Screenshot_three_players.png) | ![](screenshots/Screenshot_two_players.png)
 
 ## Использованные технологии
