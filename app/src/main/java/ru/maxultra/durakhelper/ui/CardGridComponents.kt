@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.BottomSheetScaffoldState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +24,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
 import ru.maxultra.durakhelper.DeckViewModel
 import ru.maxultra.durakhelper.R
 import ru.maxultra.durakhelper.model.Card
@@ -35,7 +38,7 @@ fun CardComponent(
     statusState: State<CardStatus>,
     cardWidth: Dp,
     cardHeight: Dp,
-    onClick: (Int) -> Unit
+    onClick: (Int) -> Unit = {}
 ) {
     val status by statusState
     if (status != CardStatus.DISCARD) {
@@ -109,12 +112,15 @@ fun CardComponent(
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
 fun CardColumnComponent(
     viewModel: DeckViewModel,
     suit: Card.Suit,
     cardWidth: Dp,
-    cardHeight: Dp
+    cardHeight: Dp,
+    scaffoldState: BottomSheetScaffoldState? = null,
+    sheetScope: CoroutineScope? = null
 ) {
     val trumpSuit by viewModel.trumpSuitLiveData.observeAsState(null)
     val backgroundColor = if (trumpSuit == suit) {
@@ -140,21 +146,33 @@ fun CardColumnComponent(
                     statusState = viewModel.state[index],
                     cardWidth = cardWidth,
                     cardHeight = cardHeight,
-                    onClick = { viewModel.onCardClick(index) }
+                    onClick = {
+                        hideBottomSheet(sheetScope, scaffoldState)
+                        viewModel.onCardClick(index)
+                    }
                 )
         }
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
-fun CardGridComponent(cardWidth: Dp, cardHeight: Dp, viewModel: DeckViewModel) {
+fun CardGridComponent(
+    cardWidth: Dp,
+    cardHeight: Dp,
+    viewModel: DeckViewModel,
+    scaffoldState: BottomSheetScaffoldState? = null,
+    sheetScope: CoroutineScope? = null
+) {
     Row {
         Card.Suit.values().forEach { suit ->
             CardColumnComponent(
                 viewModel = viewModel,
                 suit = suit,
                 cardWidth = cardWidth,
-                cardHeight = cardHeight
+                cardHeight = cardHeight,
+                scaffoldState = scaffoldState,
+                sheetScope = sheetScope
             )
         }
     }

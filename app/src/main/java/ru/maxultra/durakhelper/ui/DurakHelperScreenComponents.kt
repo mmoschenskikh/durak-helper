@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -21,6 +22,7 @@ fun DurakHelperScreen(viewModel: DeckViewModel) {
     val resetRequested by viewModel.isResetRequested.observeAsState(false)
     val scaffoldState =
         rememberBottomSheetScaffoldState(bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed))
+    val coroutineScope = rememberCoroutineScope()
     BottomSheetScaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { DurakTopAppBar(onResetClick = { viewModel.requestReset() }) },
@@ -42,9 +44,21 @@ fun DurakHelperScreen(viewModel: DeckViewModel) {
                 val w = maxWidth / 4
                 val h = maxHeight / (deckSize.asInt / 4 + 1)
                 Column(modifier = Modifier.fillMaxSize()) {
-                    CardGridComponent(cardWidth = w, cardHeight = h, viewModel = viewModel)
+                    CardGridComponent(
+                        cardWidth = w,
+                        cardHeight = h,
+                        viewModel = viewModel,
+                        scaffoldState = scaffoldState,
+                        sheetScope = coroutineScope
+                    )
                     // FIXME: Bottom buttons size should be the same for any deck size
-                    BottomBarComponent(buttonWidth = w, buttonHeight = h, viewModel = viewModel)
+                    BottomBarComponent(
+                        buttonWidth = w,
+                        buttonHeight = h,
+                        viewModel = viewModel,
+                        scaffoldState = scaffoldState,
+                        sheetScope = coroutineScope
+                    )
                 }
             }
             val exitRequested by viewModel.isExitRequested.observeAsState(false)
@@ -59,6 +73,7 @@ fun DurakHelperScreen(viewModel: DeckViewModel) {
                         viewModel.exitDurakHelper()
                     } else {
                         viewModel.resetDeckStatus()
+                        hideBottomSheet(coroutineScope, scaffoldState)
                     }
                 }
             )
