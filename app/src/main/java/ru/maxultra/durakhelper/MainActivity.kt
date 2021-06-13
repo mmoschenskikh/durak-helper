@@ -22,8 +22,4 @@ class MainActivity : AppCompatActivity() {
             if (it == true) finish()
         }
     }
-
-    override fun onBackPressed() {
-        viewModel.requestExit()
-    }
 }

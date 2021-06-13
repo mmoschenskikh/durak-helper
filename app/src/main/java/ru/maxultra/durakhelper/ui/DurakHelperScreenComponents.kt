@@ -1,5 +1,6 @@
 package ru.maxultra.durakhelper.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +24,10 @@ fun DurakHelperScreen(viewModel: DeckViewModel) {
     val scaffoldState =
         rememberBottomSheetScaffoldState(bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed))
     val coroutineScope = rememberCoroutineScope()
+    BackHandler {
+        if (!hideBottomSheet(coroutineScope, scaffoldState))
+            viewModel.requestExit()
+    }
     BottomSheetScaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { DurakTopAppBar(onResetClick = { viewModel.requestReset() }) },

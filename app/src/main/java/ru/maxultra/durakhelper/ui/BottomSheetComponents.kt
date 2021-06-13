@@ -144,13 +144,24 @@ fun BottomSheet(viewModel: DeckViewModel) {
     }
 }
 
+
+/**
+ * Hides the bottom sheet if expanded.
+ * Returns true if the sheet was hidden or false if the sheet had been collapsed.
+ */
 @ExperimentalMaterialApi
-fun hideBottomSheet(sheetScope: CoroutineScope?, scaffoldState: BottomSheetScaffoldState?) {
+fun hideBottomSheet(
+    sheetScope: CoroutineScope?,
+    scaffoldState: BottomSheetScaffoldState?
+): Boolean {
     if (sheetScope != null && scaffoldState != null) {
-        if (scaffoldState.bottomSheetState.isExpanded) {
+        val expanded = scaffoldState.bottomSheetState.isExpanded
+        if (expanded) {
             sheetScope.launch { scaffoldState.bottomSheetState.collapse() }
         }
+        return expanded
     }
+    return false
 }
 
 
